@@ -1,3 +1,4 @@
+const mongoose = require("mongoose");
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
@@ -7,94 +8,113 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-/* Temporary database */
+/* MongoDB Connection */
 
-let leads = [];
-let visits = [];
+mongoose.connect("mongodb://127.0.0.1:27017/leadcrm");
+
+console.log("MongoDB Connected");
+
+/* Lead Schema */
+
+const LeadSchema = new mongoose.Schema({
+  name: String,
+  phone: String,
+  location: String,
+  budget: Number,
+  owner: String,
+  status: String
+});
+
+const Lead = mongoose.model("Lead", LeadSchema);
+
+/* Visit Schema */
+
+const VisitSchema = new mongoose.Schema({
+  leadName: String,
+  date: String,
+  time: String,
+  property: String
+});
+
+const Visit = mongoose.model("Visit", VisitSchema);
 
 
 /* ADD LEAD */
 
-app.post("/api/leads", (req, res) => {
+app.post("/api/leads", async (req, res) => {
 
-const lead = {
+  const lead = new Lead({
+    name: req.body.name,
+    phone: req.body.phone,
+    location: req.body.location,
+    budget: req.body.budget,
+    owner: req.body.owner,
+    status: "New"
+  });
 
-id: leads.length + 1,
-name: req.body.name,
-phone: req.body.phone,
-location: req.body.location,
-budget: req.body.budget,
-owner: req.body.owner,
-status: "New"
+  await lead.save();
 
-};
-
-leads.push(lead);
-
-res.json(lead);
+  res.json(lead);
 
 });
 
 
 /* GET ALL LEADS */
 
-app.get("/api/leads", (req, res) => {
+app.get("/api/leads", async (req, res) => {
 
-res.json(leads);
+  const leads = await Lead.find();
+
+  res.json(leads);
 
 });
 
 
 /* UPDATE LEAD STATUS */
 
-app.put("/api/leads/:id", (req, res) => {
+app.put("/api/leads/:id", async (req, res) => {
 
-const id = parseInt(req.params.id);
+  await Lead.findByIdAndUpdate(req.params.id, {
+    status: req.body.status
+  });
 
-const lead = leads.find(l => l.id === id);
+  res.json({ message: "Status Updated" });
 
-if(lead){
+});
+app.delete("/api/leads/:id", async (req,res)=>{
 
-lead.status = req.body.status;
+await Lead.findByIdAndDelete(req.params.id);
 
-res.json(lead);
-
-}
-else{
-
-res.status(404).send("Lead not found");
-
-}
+res.json({message:"Lead deleted"});
 
 });
 
 
 /* SCHEDULE VISIT */
 
-app.post("/api/visits", (req, res) => {
+app.post("/api/visits", async (req, res) => {
 
-const visit = {
+  const visit = new Visit({
+    leadName: req.body.leadName,
+    date: req.body.date,
+    time: req.body.time,
+    property: req.body.property
+  });
 
-id: visits.length + 1,
-leadName: req.body.leadName,
-date: req.body.date,
-time: req.body.time,
-property: req.body.property
+  await visit.save();
 
-};
-
-visits.push(visit);
-
-res.json(visit);
+  res.json(visit);
 
 });
 
 
-/* GET ALL VISITS (optional but useful) */
+/* GET ALL VISITS */
 
-app.get("/api/visits", (req, res) => {
+app.get("/api/visits", async (req, res) => {
 
-res.json(visits);
+  const visits = await Visit.find();
+
+  res.json(visits);
 
 });
 
@@ -103,6 +123,6 @@ res.json(visits);
 
 app.listen(3000, () => {
 
-console.log("Server running on port 3000");
+  console.log("Server running on port 3000");
 
 });

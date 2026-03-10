@@ -62,12 +62,15 @@ table.innerHTML += `
 <td>${lead.status}</td>
 
 <td>
-<select onchange="updateStatus(${lead.id}, this.value)">
+<select onchange="updateStatus('${lead._id}', this.value)">
 <option value="New">New</option>
 <option value="Contacted">Contacted</option>
 <option value="Visit Scheduled">Visit Scheduled</option>
 <option value="Closed">Closed</option>
 </select>
+</td>
+<td>
+<button onclick="deleteLead('${lead._id}')">Delete</button>
 </td>
 
 </tr>
@@ -140,3 +143,49 @@ alert("Visit Scheduled Successfully");
 
 /* LOAD DATA WHEN PAGE OPENS */
 loadLeads();
+mongoose.connect("mongodb://127.0.0.1:27017/leadcrm", {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+});
+
+console.log("MongoDB Connected");
+function loadVisits(){
+
+fetch("http://localhost:3000/api/visits")
+.then(res=>res.json())
+.then(data=>{
+
+const table = document.getElementById("visitTable");
+
+if(!table) return;
+
+table.innerHTML="";
+
+data.forEach(visit=>{
+
+table.innerHTML += `
+<tr>
+<td>${visit.leadName}</td>
+<td>${visit.date}</td>
+<td>${visit.time}</td>
+<td>${visit.property}</td>
+</tr>
+`;
+
+});
+
+});
+
+}
+
+loadVisits();
+function deleteLead(id){
+
+fetch(API + "/" + id,{
+method:"DELETE"
+})
+.then(()=>{
+loadLeads();
+});
+
+}

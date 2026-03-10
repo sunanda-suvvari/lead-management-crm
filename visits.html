@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Visits</title>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="navbar.css">
+
+</head>
+
+<body>
+
+<div class="navbar">
+
+<a href="dashboard.html">Dashboard</a>
+<a href="leads.html">Leads</a>
+<a href="visits.html">Visits</a>
+
+</div>
+
+<h1>Schedule Visit</h1>
+
+<input id="visitLead" placeholder="Lead Name">
+<input id="visitDate" type="date">
+<input id="visitTime" type="time">
+<input id="visitProperty" placeholder="Property">
+
+<button onclick="scheduleVisit()">Schedule Visit</button>
+<h2>Scheduled Visits</h2>
+
+<table border="1">
+
+<thead>
+<tr>
+<th>Lead Name</th>
+<th>Date</th>
+<th>Time</th>
+<th>Property</th>
+</tr>
+</thead>
+
+<tbody id="visitTable"></tbody>
+
+</table>
+
+<script src="script.js"></script>
+
+</body>
+
+</html>

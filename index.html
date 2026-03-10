@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<title>Lead Management CRM</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<h1>Lead Management CRM</h1>
+<h2>Dashboard</h2>
+
+<div class="dashboard">
+
+<div class="card">
+<h3>Total Leads</h3>
+<p id="totalLeads">0</p>
+</div>
+
+<div class="card">
+<h3>New</h3>
+<p id="newLeads">0</p>
+</div>
+
+<div class="card">
+<h3>Contacted</h3>
+<p id="contactedLeads">0</p>
+</div>
+
+<div class="card">
+<h3>Visits</h3>
+<p id="visitLeads">0</p>
+</div>
+
+<div class="card">
+<h3>Closed</h3>
+<p id="closedLeads">0</p>
+</div>
+
+</div>
+
+<h2>Add Lead</h2>
+
+<input id="name" placeholder="Name">
+<input id="phone" placeholder="Phone">
+<input id="location" placeholder="Location">
+<input id="budget" placeholder="Budget">
+<input id="owner" placeholder="Owner / Agent">
+
+<button onclick="addLead()">Add Lead</button>
+<h2>Schedule Visit</h2>
+
+<input id="visitLead" placeholder="Lead Name">
+<input id="visitDate" type="date">
+<input id="visitTime" type="time">
+<input id="visitProperty" placeholder="Property Name">
+
+<button onclick="scheduleVisit()">Schedule Visit</button>
+
+<h2>Leads</h2>
+
+<table border="1">
+
+<thead>
+<tr>
+<th>Name</th>
+<th>Phone</th>
+<th>Location</th>
+<th>Budget</th>
+<th>Owner</th>
+<th>Status</th>
+<th>Update</th>
+</tr>
+</thead>
+
+<tbody id="leadTable"></tbody>
+
+</table>
+
+<script src="script.js"></script>
+
+</body>
+
+</html>
